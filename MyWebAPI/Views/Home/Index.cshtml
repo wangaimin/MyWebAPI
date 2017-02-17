@@ -1,0 +1,74 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <script src="~/Scripts/jquery-1.10.2.js"></script>
+    <script src="~/Scripts/jquery.json.min.js"></script>
+</head>
+<body>
+    <div> 
+        <h3>来自webApi</h3>
+        <ul id="productsUl"></ul>
+    </div>
+
+
+    <div>
+        <h2>来自Controller</h2>
+        <ul id="productsUl2"></ul>
+    </div>
+</body>
+</html>
+
+<script >
+
+    $.getJSON("/api/Products/GetAllProducts", "", function (data) {
+
+        console.log(data);
+        $.each(data, function (index, product) { 
+        
+            var str = "<li>" + product.Name + ":" + product.Price + "</li>";
+            $("#productsUl").append(str)
+
+        })
+
+    })
+
+    $.getJSON("/Home/GetAllProducts", "", function (data) {
+
+        console.log(data);
+        $.each(data, function (index, product) {
+
+            var str = "<li>" + product.Name + ":" + product.Price + "</li>";
+            $("#productsUl2").append(str)
+
+        })
+
+    })
+
+  //  var data = $.toJSON({ Id: 4, Name: '新增商品', Category: '非机动车', Price: 189 } );
+    //var data = { 'product': { Id: 4, Name: '新增商品', Category: '非机动车', Price: 189 } };
+    var data =  { Id: 4, Name: '新增商品', Category: '非机动车', Price: 189 };
+
+
+  
+
+
+    $.ajax({
+        url: '/api/Products/PostProduct',
+        type: "post",
+        contentType: 'application/json;utf-8',
+        dataType: "json",
+        data:$.toJSON( data)
+    }).done(function (res) {
+        console.log(data);
+
+    });
+
+</script>
