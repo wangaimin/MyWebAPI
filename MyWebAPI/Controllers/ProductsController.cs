@@ -38,14 +38,64 @@ namespace MyWebAPI.Controllers
             return products.Where(m=>m.Category.Equals(category));
         }
 
-        public HttpResponseMessage PostProduct([FromBody]Product product) {
+
+       
+
+        /// <summary>
+        /// post请求创建商品
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        public Product PostProduct(Product product) {
 
             products.Add(product);
+            product.Id = 999;
 
 
-            return new HttpResponseMessage();
+            return product;
         }
 
+
+        /// <summary>
+        /// 对post请求修改了状态码为创建成功（201）
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        public HttpResponseMessage PostProduct2(Product product)
+        {
+
+            products.Add(product);
+            product.Id = 999;
+
+            var response = Request.CreateResponse<Product>(HttpStatusCode.Created, product);
+            string uri = Url.Link("Default",new {  id=999});
+            response.Headers.Location =new Uri( uri);
+
+            return response;
+        }
+
+
+
+        /// <summary>
+        /// post请求创建多参数
+        /// </summary>
+        /// <param name="product"></param>
+        /// <returns></returns>
+        public Product PostProduct3(int id,string name)
+        {
+
+            Product product = new Product() {
+                 Id=id,
+                Name=name
+            };
+
+
+            return product;
+        }
+
+
+
+       
     }
 
 

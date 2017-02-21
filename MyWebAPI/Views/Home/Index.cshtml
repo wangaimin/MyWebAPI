@@ -65,10 +65,38 @@
         type: "post",
         contentType: 'application/json;utf-8',
         dataType: "json",
-        data:$.toJSON( data)
+        data: $.toJSON(data)
     }).done(function (res) {
-        console.log(data);
+        console.log(res);
 
     });
+
+
+    $.ajax({
+        url: '/api/Products/PostProduct2',
+        type: "post",
+        contentType: 'application/json;utf-8',
+        dataType: "json",
+        data: $.toJSON(data)
+    }).done(function (res) {
+        console.log(res);
+
+    });
+
+
+    $.ajax({
+        url: '/api/Products/PostProduct3',
+        type: "post",
+        contentType: 'application/json;utf-8',
+        dataType: "json",
+        data:{'':1,'':'苹果'}
+    }).done(function (res) {
+        console.log(res);
+
+    });
+
+    
+
+    
 
 </script>

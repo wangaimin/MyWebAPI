@@ -7,6 +7,8 @@ using System.Web.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using WebAPI;
 using WebAPI.Controllers;
+using MyWebAPI.Controllers;
+using MyWebAPI.Models;
 
 namespace WebAPI.Tests.Controllers
 {
@@ -76,6 +78,172 @@ namespace WebAPI.Tests.Controllers
             controller.Delete(5);
 
             // 断言
+        }
+
+
+        [TestMethod]
+        public void GetAllProducts()
+        {
+            ProductsController controller = new ProductsController();
+            var data = controller.GetAllProducts();
+        }
+
+
+        [TestMethod]
+        public void GetAllProductsByHttpClient()
+        {
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:52181");
+            // Add an Accept header for JSON format.
+            // 为JSON格式添加一个Accept报头
+            //并将Accept报头设置为“application/json”，这是告诉服务器，以JSON格式发送数据。
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+            HttpResponseMessage response = client.GetAsync("api/Products/GetAllProducts").Result;
+
+            response.EnsureSuccessStatusCode();    // Throw if not a success code. 
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Parse the response body. Blocking!
+                // 解析响应体。阻塞！
+                var products = response.Content.ReadAsAsync<IEnumerable<Product>>().Result;
+            }
+            else
+            {
+
+                int statusCode = (int)response.StatusCode;//错误码
+                string msg = response.ReasonPhrase;//错误原因
+            }
+
+        }
+
+        [TestMethod]
+        public void GetProductById()
+        {
+            try
+            {
+
+
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:52181");
+                // Add an Accept header for JSON format.
+                // 为JSON格式添加一个Accept报头
+                //并将Accept报头设置为“application/json”，这是告诉服务器，以JSON格式发送数据。
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                HttpResponseMessage response = client.GetAsync("api/Products/GetProductById/1").Result;
+                if (response.IsSuccessStatusCode)
+                {
+                    // Parse the response body. Blocking!
+                    // 解析响应体。阻塞！
+                    var products = response.Content.ReadAsAsync<Product>().Result;
+                }
+                else
+                {
+
+                    int statusCode = (int)response.StatusCode;//错误码
+                    string msg = response.ReasonPhrase;//错误原因
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+
+        /// <summary>
+        /// 异步
+        /// </summary>
+        [TestMethod]
+        public  void GetProductByIdWithAsync()
+        {
+            GetProductByIdWithAsync2();
+
+        }
+
+
+        public async void GetProductByIdWithAsync2()
+        {
+            try
+            {
+
+
+                HttpClient client = new HttpClient();
+                client.BaseAddress = new Uri("http://localhost:52181");
+                // Add an Accept header for JSON format.
+                // 为JSON格式添加一个Accept报头
+                //并将Accept报头设置为“application/json”，这是告诉服务器，以JSON格式发送数据。
+                client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+                var response = await client.GetAsync("api/Products/GetProductById/1");
+
+                response.EnsureSuccessStatusCode();// Throw on error code（有错误码时报出异常）.
+
+                var product = await response.Content.ReadAsAsync<Product>();
+                Console.WriteLine(product);
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+
+        }
+
+
+        [TestMethod]
+        public void PostProduct()
+        {
+
+            Product product = new Product { Id = 5, Name = "面包" };
+
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:52181");
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = client.PostAsJsonAsync("api/Products/PostProduct", product).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+
+            }
+            else
+            {
+
+                int statusCode = (int)response.StatusCode;//错误码
+                string msg = response.ReasonPhrase;//错误原因
+            }
+
+        }
+
+
+
+        [TestMethod]
+        public void PostProduct2()
+        {
+            Product product = new Product { Id = 5, Name = "面包" };
+
+
+            HttpClient client = new HttpClient();
+            client.BaseAddress = new Uri("http://localhost:52181");
+            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
+
+            HttpResponseMessage response = client.PostAsJsonAsync("api/Products/PostProduct2", product).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+
+            }
+            else
+            {
+
+                int statusCode = (int)response.StatusCode;//错误码
+                string msg = response.ReasonPhrase;//错误原因
+            }
+
         }
     }
 }

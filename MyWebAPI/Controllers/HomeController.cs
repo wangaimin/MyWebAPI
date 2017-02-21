@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -19,6 +20,9 @@ namespace MyWebAPI.Controllers
         // GET: Home
         public ActionResult Index()
         {
+          
+
+
             return View();
         }
 
@@ -35,9 +39,23 @@ namespace MyWebAPI.Controllers
 
             //   products.Add(product);
 
-
             return new JsonResult() { Data = product, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
 
+        }
+
+
+        async void GetData()
+        {
+
+            string url = "http://localhost:52181/api/Products/GetAllProducts";
+            var handler = new HttpClientHandler() { AutomaticDecompression = System.Net.DecompressionMethods.GZip };
+            using (var http = new HttpClient(handler))
+            {
+                var response =await http.GetAsync(url);
+                response.EnsureSuccessStatusCode();
+                string result=    await response.Content.ReadAsStringAsync();
+               
+            }
         }
     }
 }

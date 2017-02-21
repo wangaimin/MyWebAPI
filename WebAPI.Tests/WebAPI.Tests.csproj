@@ -102,6 +102,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MyWebAPI\MyWebAPI.csproj">
+      <Project>{8d998f07-d7ac-4bf4-bece-66e576fe023f}</Project>
+      <Name>MyWebAPI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WebAPI\WebAPI.csproj">
       <Project>{744836B6-2277-47F0-B749-72F87B547774}</Project>
       <Name>WebAPI</Name>
